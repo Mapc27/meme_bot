@@ -11,7 +11,7 @@ class MemeGenerator:
 
         self.image: Image = None
         self.file_name: str = ''
-        self.draw: ImageDraw = None
+        self.draw: ImageDraw.Draw = None
         self.font: ImageFont = None
 
         self.top_caption: str = ''
@@ -28,7 +28,7 @@ class MemeGenerator:
 
         if image:
             for instance in cls.instances:
-                if instance.need_image():
+                if instance.need_image() and not instance.have_author(chat_id):
                     instance.add_image(image)
                     instance.add_author(chat_id)
                     return instance
@@ -41,7 +41,7 @@ class MemeGenerator:
 
         if caption:
             for instance in cls.instances:
-                if instance.need_caption():
+                if instance.need_caption() and not instance.have_author(chat_id):
                     instance.add_caption(caption)
                     instance.add_author(chat_id)
                     return instance
@@ -78,8 +78,9 @@ class MemeGenerator:
         if len(self.authors) < 0:
             raise AttributeError("Authors number can't be less than 0")
 
-        if chat_id in self.authors:
-            raise AttributeError("This author already ")
+        if self.have_author(chat_id):
+            raise AttributeError("This author already exists")
+
         self.authors.append(chat_id)
 
     def need_image(self):
@@ -90,6 +91,9 @@ class MemeGenerator:
 
     def ready(self):
         return True if self.image and self.top_caption and self.bottom_caption else False
+
+    def have_author(self, chat_id: int):
+        return chat_id in self.authors
 
     def generate(self):
         if self.need_image():
