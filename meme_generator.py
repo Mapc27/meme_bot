@@ -73,6 +73,9 @@ class MemeGenerator:
         self.font = ImageFont.truetype("impact.ttf", 42)
 
     def add_caption(self, caption: str):
+        if not self.need_caption():
+            raise AttributeError('All captions already exists')
+
         if not self.top_caption:
             self.top_caption = caption
 
