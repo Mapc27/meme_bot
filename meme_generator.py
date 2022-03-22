@@ -55,10 +55,13 @@ class MemeGenerator:
 
             return instance
 
-    def remove_instance(self):
+    def delete(self):
         try:
             self.instances.remove(self)
-            del self
+            try:
+                os.remove(f"{IMAGES_FOLDER_NAME}/{self.file_name}")
+            except FileNotFoundError:
+                raise FileNotFoundError(f"File {self.file_name} doesn't exists in {IMAGES_FOLDER_NAME} folder")
         except ValueError:
             raise ValueError("instance doesn't exists in cls.instances list")
 
@@ -158,3 +161,5 @@ if __name__ == '__main__':
     generator = meme_generator.add_something(3, caption="One does not")
     if generator.ready():
         print(meme_generator.generate())
+        meme_generator.delete()
+        del meme_generator
