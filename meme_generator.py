@@ -18,7 +18,7 @@ class MemeGenerator:
         self.font: ImageFont = None
 
         self.top_caption: str = ''
-        self.bottom_caption: str = ''
+        self.bottom_caption: str = '123'
 
         self.authors: List[int] = []
 
@@ -70,7 +70,7 @@ class MemeGenerator:
             raise AttributeError('image already exists')
 
         if not os.path.exists(f"{IMAGES_FOLDER_NAME}/{file_name}"):
-            raise FileExistsError(f"'{file_name}' doesn't exists in /images folder")
+            raise FileExistsError(f"'{file_name}' doesn't exists in /{IMAGES_FOLDER_NAME} folder")
 
         self.image = Image.open(f"{IMAGES_FOLDER_NAME}/{file_name}")
         self.file_name = file_name
@@ -88,7 +88,7 @@ class MemeGenerator:
             self.bottom_caption = caption
 
     def add_author(self, chat_id: int):
-        if len(self.authors) > 2:
+        if len(self.authors) > 1:
             raise AttributeError("Max authors number is 3")
 
         if len(self.authors) < 0:
@@ -121,7 +121,7 @@ class MemeGenerator:
         if self.need_caption():
             raise AttributeError("Need more captions")
 
-        if len(self.authors) != 3:
+        if len(self.authors) > 3:
             raise AttributeError("Authors number less or more than 3")
 
         self.write_top_caption()
@@ -160,7 +160,6 @@ class MemeGenerator:
 if __name__ == '__main__':
     generator = MemeGenerator.add_something(1, image='image.jpeg')
     generator = MemeGenerator.add_something(2, caption="One does not simplyfd")
-    generator = MemeGenerator.add_something(3, caption="One does not")
     if generator.ready():
         print(generator.generate())
         generator.delete()
