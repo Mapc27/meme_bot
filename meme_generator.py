@@ -1,8 +1,14 @@
+from typing import List
+
 from PIL import Image, ImageFont, ImageDraw
 
 
 class MemeGenerator:
+    instances: List = []
+
     def __init__(self):
+        self.instances.append(self)
+
         self.image: Image = None
         self.file_name: str = ''
         self.draw: ImageDraw = None
@@ -10,6 +16,41 @@ class MemeGenerator:
 
         self.top_caption: str = ''
         self.bottom_caption: str = ''
+
+        self.authors: List[int] = []
+
+    @classmethod
+    def add_something(cls, chat_id: int, image: str = '', caption: str = ''):
+        if image and caption or not image and not caption:
+            raise AttributeError("choose only one of fields image and text")
+
+        instance: MemeGenerator
+
+        if image:
+            for instance in cls.instances:
+                if instance.need_image():
+                    instance.add_image(image)
+                    instance.add_author(chat_id)
+                    return instance
+
+            instance = MemeGenerator()
+            instance.add_image(image)
+            instance.add_author(chat_id)
+
+            return instance
+
+        if caption:
+            for instance in cls.instances:
+                if instance.need_caption():
+                    instance.add_caption(caption)
+                    instance.add_author(chat_id)
+                    return instance
+
+            instance = MemeGenerator()
+            instance.add_caption(caption)
+            instance.add_author(chat_id)
+
+            return instance
 
     def add_image(self, file_name: str):
         if self.image:
@@ -30,15 +71,35 @@ class MemeGenerator:
         else:
             raise AttributeError('All captions already exists')
 
+    def add_author(self, chat_id: int):
+        if len(self.authors) > 2:
+            raise AttributeError("Max authors number is 3")
+
+        if len(self.authors) < 0:
+            raise AttributeError("Authors number can't be less than 0")
+
+        if chat_id in self.authors:
+            raise AttributeError("This author already ")
+        self.authors.append(chat_id)
+
+    def need_image(self):
+        return False if self.image else True
+
+    def need_caption(self):
+        return False if self.top_caption and self.bottom_caption else True
+
+    def ready(self):
+        return True if self.image and self.top_caption and self.bottom_caption else False
+
     def generate(self):
-        if not self.image:
-            raise AttributeError("image doesn't exists")
+        if self.need_image():
+            raise AttributeError("'image' doesn't exists")
 
-        if not self.top_caption:
-            raise AttributeError("top_caption doesn't exists")
+        if self.need_caption():
+            raise AttributeError("Need more captions")
 
-        if not self.bottom_caption:
-            raise AttributeError("bottom_caption doesn't exists")
+        if len(self.authors) != 3:
+            raise AttributeError("Authors number less or more than 3")
 
         self.draw_text(self.top_caption, 'top')
         self.draw_text(self.bottom_caption, 'bottom')
