@@ -7,6 +7,7 @@ authors = ["Mapc <mapctrigotixd@gmail.com>"]
 [tool.poetry.dependencies]
 python = "^3.8"
 Pillow = "^9.0.1"
+aiogram = "^2.19"
 
 [tool.poetry.dev-dependencies]
 
