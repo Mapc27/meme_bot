@@ -82,9 +82,6 @@ class MemeGenerator:
         elif not self.bottom_caption:
             self.bottom_caption = caption
 
-        else:
-            raise AttributeError('All captions already exists')
-
     def add_author(self, chat_id: int):
         if len(self.authors) > 2:
             raise AttributeError("Max authors number is 3")
