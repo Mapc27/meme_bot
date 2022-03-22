@@ -3,6 +3,8 @@ from typing import List
 
 from PIL import Image, ImageFont, ImageDraw
 
+from config import IMAGES_FOLDER_NAME
+
 
 class MemeGenerator:
     instances: List = []
@@ -64,10 +66,10 @@ class MemeGenerator:
         if self.image:
             raise AttributeError('image already exists')
 
-        if not os.path.exists(f"images/{file_name}"):
+        if not os.path.exists(f"{IMAGES_FOLDER_NAME}/{file_name}"):
             raise FileExistsError(f"'{file_name}' doesn't exists in /images folder")
 
-        self.image = Image.open(f"images/{file_name}")
+        self.image = Image.open(f"{IMAGES_FOLDER_NAME}/{file_name}")
         self.file_name = file_name
         self.draw = ImageDraw.Draw(self.image)
         self.font = ImageFont.truetype("impact.ttf", 42)
