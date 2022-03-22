@@ -111,6 +111,9 @@ class MemeGenerator:
     def have_author(self, chat_id: int):
         return chat_id in self.authors
 
+    def get_authors(self):
+        return self.authors
+
     def generate(self):
         if self.need_image():
             raise AttributeError("image doesn't exists")
@@ -155,11 +158,10 @@ class MemeGenerator:
 
 
 if __name__ == '__main__':
-    meme_generator = MemeGenerator()
-    meme_generator.add_something(1, image='image.jpeg')
-    meme_generator.add_something(2, caption="One does not simplyfd")
-    generator = meme_generator.add_something(3, caption="One does not")
+    generator = MemeGenerator.add_something(1, image='image.jpeg')
+    generator = MemeGenerator.add_something(2, caption="One does not simplyfd")
+    generator = MemeGenerator.add_something(3, caption="One does not")
     if generator.ready():
-        print(meme_generator.generate())
-        meme_generator.delete()
-        del meme_generator
+        print(generator.generate())
+        generator.delete()
+        del generator
