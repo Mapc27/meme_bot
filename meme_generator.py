@@ -18,7 +18,7 @@ class MemeGenerator:
         self.font: ImageFont = None
 
         self.top_caption: str = ''
-        self.bottom_caption: str = '123'
+        self.bottom_caption: str = ''
 
         self.authors: List[int] = []
 
@@ -88,7 +88,7 @@ class MemeGenerator:
             self.bottom_caption = caption
 
     def add_author(self, chat_id: int):
-        if len(self.authors) > 1:
+        if len(self.authors) > 2:
             raise AttributeError("Max authors number is 3")
 
         if len(self.authors) < 0:
@@ -121,7 +121,7 @@ class MemeGenerator:
         if self.need_caption():
             raise AttributeError("Need more captions")
 
-        if len(self.authors) > 3:
+        if len(self.authors) != 3:
             raise AttributeError("Authors number less or more than 3")
 
         self.write_top_caption()
@@ -135,9 +135,6 @@ class MemeGenerator:
         text = text.upper()
         text_width, text_height = self.draw.textsize(text, self.font)
 
-        print(self.image.width, self.image.height)
-        print(text_width, text_height)
-
         coord_x = (self.image.width - text_width) // 2
         coord_y = 7
 
@@ -148,19 +145,7 @@ class MemeGenerator:
         text = text.upper()
         text_width, text_height = self.draw.textsize(text, self.font)
 
-        print(self.image.width, self.image.height)
-        print(text_width, text_height)
-
         coord_x = (self.image.width - text_width) // 2
         coord_y = self.image.height - 7 - text_height
 
         self.draw.text((coord_x, coord_y), text, (255, 255, 255), font=self.font)
-
-
-if __name__ == '__main__':
-    generator = MemeGenerator.add_something(1, image='image.jpeg')
-    generator = MemeGenerator.add_something(2, caption="One does not simplyfd")
-    if generator.ready():
-        print(generator.generate())
-        generator.delete()
-        del generator
