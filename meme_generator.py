@@ -53,6 +53,13 @@ class MemeGenerator:
 
             return instance
 
+    def remove_instance(self):
+        try:
+            self.instances.remove(self)
+            del self
+        except ValueError:
+            raise ValueError("instance doesn't exists in cls.instances list")
+
     def add_image(self, file_name: str):
         if self.image:
             raise AttributeError('image already exists')
