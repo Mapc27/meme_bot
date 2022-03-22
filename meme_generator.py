@@ -1,3 +1,4 @@
+import os
 from typing import List
 
 from PIL import Image, ImageFont, ImageDraw
@@ -56,6 +57,9 @@ class MemeGenerator:
         if self.image:
             raise AttributeError('image already exists')
 
+        if not os.path.exists(f"images/{file_name}"):
+            raise FileExistsError(f"'{file_name}' doesn't exists in /images folder")
+
         self.image = Image.open(f"images/{file_name}")
         self.file_name = file_name
         self.draw = ImageDraw.Draw(self.image)
@@ -97,7 +101,7 @@ class MemeGenerator:
 
     def generate(self):
         if self.need_image():
-            raise AttributeError("'image' doesn't exists")
+            raise AttributeError("image doesn't exists")
 
         if self.need_caption():
             raise AttributeError("Need more captions")
